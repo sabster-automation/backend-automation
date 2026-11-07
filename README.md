@@ -138,20 +138,3 @@ playwright-cli -s=todo-app screenshot --filename=reports/todomvc-verified.png
 # Close session
 playwright-cli -s=todo-app close
 ```
-
----
-
-## ℹ️ Language & Test Framework Details
-
-### Why Was the Repository Shown as "HTML" on GitHub?
-GitHub uses **Linguist** to determine repository language percentages by counting code bytes in tracked files:
-- The Playwright standalone HTML test report (`reports/playwright-html/index.html`) is a bundled single-page application (~525 KB).
-- By contrast, the framework's TypeScript source files total ~80 KB.
-- Because `reports/` was tracked in git, Linguist detected HTML as over 86% of the code bytes.
-- This is resolved by `.gitattributes`, which marks `reports/**` as `linguist-generated` and ignores HTML/XML report files from language calculation, restoring **TypeScript** as the dominant language.
-
-### Testing Framework: Vitest & Playwright with JUnit XML
-- This repository is a modern **TypeScript / Node.js** project.
-- It uses **Vitest** (BDD style: `describe`, `it`, `expect`) for unit, API, and message queue testing.
-- It uses **Playwright Test** for browser end-to-end testing.
-- Test results are formatted using standard **JUnit XML** (`reports/junit-report.xml`), compatible with standard CI/CD pipelines (Jenkins, GitHub Actions, GitLab CI). *Note: xUnit is a .NET/C# testing framework, whereas this framework leverages TypeScript-native runners.*
