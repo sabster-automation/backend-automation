@@ -1,2 +1,18 @@
-# Playwright CLI output (may contain credentials)
+# Environment files
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Playwright & Browser Testing
 .playwright-cli/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# Allure & Test Artifacts
+allure-results/
+allure-report/
