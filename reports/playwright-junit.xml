@@ -1,0 +1,18 @@
+<testsuites id="" name="" tests="6" failures="0" skipped="0" errors="0" time="4.164897">
+<testsuite name="auth.spec.ts" timestamp="2026-11-07T17:21:36.018Z" hostname="chromium" tests="3" failures="0" skipped="0" time="2.407" errors="0">
+<testcase name="Portal Authentication E2E Flow › should display login form elements correctly" classname="auth.spec.ts" time="0.794">
+</testcase>
+<testcase name="Portal Authentication E2E Flow › should show error message on invalid credentials" classname="auth.spec.ts" time="0.608">
+</testcase>
+<testcase name="Portal Authentication E2E Flow › should successfully log in and redirect to dashboard" classname="auth.spec.ts" time="1.005">
+</testcase>
+</testsuite>
+<testsuite name="dashboard.spec.ts" timestamp="2026-11-07T17:21:36.018Z" hostname="chromium" tests="3" failures="0" skipped="0" time="2.577" errors="0">
+<testcase name="Dashboard Operations E2E Flow › should display dashboard header and operational metrics" classname="dashboard.spec.ts" time="0.637">
+</testcase>
+<testcase name="Dashboard Operations E2E Flow › should populate users table with records" classname="dashboard.spec.ts" time="0.869">
+</testcase>
+<testcase name="Dashboard Operations E2E Flow › should log out and redirect back to login page" classname="dashboard.spec.ts" time="1.071">
+</testcase>
+</testsuite>
+</testsuites>

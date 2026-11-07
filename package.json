@@ -1,0 +1,38 @@
+{
+  "name": "backend-automation",
+  "version": "1.0.0",
+  "description": "Production-grade backend, API, and message queue test automation framework with Playwright, k6, and PDF reporting",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "vitest run",
+    "test:api": "vitest run tests/api",
+    "test:rabbitmq": "vitest run tests/rabbitmq",
+    "test:e2e": "playwright test",
+    "test:perf": "tsx scripts/run-k6.ts",
+    "report:allure": "allure generate allure-results --clean -o allure-report && allure open allure-report",
+    "report:pdf": "tsx scripts/generate-pdf-report.ts",
+    "mock:server": "tsx tests/mock-server/server.ts"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "amqplib": "^0.10.5",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "winston": "^3.17.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/amqplib": "^0.10.6",
+    "@types/node": "^22.13.4",
+    "allure-commandline": "^2.32.2",
+    "allure-vitest": "^3.2.0",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
+  },
+  "license": "ISC"
+}
