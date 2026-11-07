@@ -70,6 +70,69 @@ backend-automation/
 
 ---
 
+## ⚡ Quick Start
+
+Follow these steps to set up and run the framework on a freshly cloned machine:
+
+### 1. Prerequisites
+- **Node.js**: `v18+` (or `v20+` recommended)
+- **npm**: `v9+`
+
+### 2. Clone & Install Dependencies
+```bash
+git clone <repository-url>
+cd backend-automation
+npm install
+```
+
+### 3. Install Playwright Browsers (for E2E & PDF Reports)
+```bash
+npx playwright install chromium
+```
+
+### 4. Configure Environment Variables
+Copy `.env.example` to `.env` (the defaults work out of the box for hermetic local testing):
+```bash
+# On Linux/macOS
+cp .env.example .env
+
+# On Windows (PowerShell)
+Copy-Item .env.example .env
+```
+
+> **Note on Hermetic Execution**: External dependencies like RabbitMQ or a remote backend are optional.
+> - When running against `localhost` / `127.0.0.1`, Vitest automatically spins up the internal mock API/web server during `globalSetup`.
+> - If an external RabbitMQ instance is not reachable, `RabbitMQClient` automatically falls back to an in-memory AMQP broker simulator.
+
+### 5. Run the Tests
+```bash
+# Run API integration test suite
+npm run test:api
+
+# Run RabbitMQ event messaging tests
+npm run test:rabbitmq
+
+# Run all Vitest suites
+npm test
+
+# Run Playwright E2E browser tests
+npm run test:e2e
+
+# Run performance / load tests
+npm run test:perf
+```
+
+### 6. Generate Reports
+```bash
+# Generate HTML and executive PDF report (from JUnit XML)
+npm run report:pdf
+
+# Generate and view Allure reports
+npm run report:allure
+```
+
+---
+
 ## 🚀 Key Framework Capabilities
 
 ### 1. Robust HTTP Client (`ApiClient`)
