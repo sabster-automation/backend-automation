@@ -1,6 +1,6 @@
-# Production Backend Test Automation Framework
+# Production Backend & Automation Test Framework
 
-A production-grade backend, API, and message queue test automation framework built with **TypeScript**, **Playwright**, **Vitest**, **RabbitMQ (amqplib)**, **Axios**, **Zod**, and **Playwright PDF Reporting**.
+A production-grade backend, API, message queue, and browser automation test framework built with **TypeScript**, **Vitest**, **Playwright**, **RabbitMQ (amqplib)**, **Axios**, **Zod**, and **Playwright PDF Reporting**.
 
 ---
 
@@ -8,88 +8,100 @@ A production-grade backend, API, and message queue test automation framework bui
 
 ```
 backend-automation/
+├── .agents/skills/playwright-cli/ # Antigravity agent browser automation skill
+├── .claude/skills/playwright-cli/ # Claude Code agent browser automation skill
 ├── src/
 │   ├── config/
-│   │   └── env.config.ts        # Zod-validated environment config (.env)
+│   │   └── env.config.ts          # Zod-validated environment config (.env)
 │   ├── core/
 │   │   ├── http/
-│   │   │   ├── ApiClient.ts     # Axios wrapper with retries, interceptors & typed responses
-│   │   │   └── AuthManager.ts   # Session & token lifecycle management
+│   │   │   ├── ApiClient.ts       # Axios wrapper with retries, interceptors & typed responses
+│   │   │   └── AuthManager.ts     # Session & token lifecycle management
 │   │   ├── mq/
-│   │   │   └── RabbitMQClient.ts# AMQP client with exchanges, queues & hermetic mock fallback
+│   │   │   └── RabbitMQClient.ts  # AMQP client with exchanges, queues & hermetic mock fallback
 │   │   └── utils/
-│   │       ├── dataGenerator.ts  # Realistic domain test data generation with Faker
-│   │       ├── logger.ts         # Winston structured logger
-│   │       └── schemaValidator.ts# Zod contract validation & runtime assertions
-│   ├── pages/                   # Playwright Page Object Models
+│   │       ├── dataGenerator.ts    # Realistic domain test data generation with Faker
+│   │       ├── logger.ts           # Winston structured logger
+│   │       └── schemaValidator.ts  # Zod contract validation & runtime assertions
+│   ├── pages/                     # Playwright Page Object Models
 │   │   ├── BasePage.ts
 │   │   ├── LoginPage.ts
 │   │   └── DashboardPage.ts
-│   ├── schemas/                 # Strongly-typed Zod schemas & TypeScript types
+│   ├── schemas/                   # Strongly-typed Zod schemas & TypeScript types
 │   │   ├── auth.schema.ts
 │   │   ├── user.schema.ts
 │   │   ├── order.schema.ts
 │   │   └── event.schema.ts
-│   ├── services/                # API service abstraction layer
+│   ├── services/                  # API service abstraction layer
 │   │   ├── AuthService.ts
 │   │   ├── UserService.ts
 │   │   └── OrderService.ts
-│   └── index.ts                 # Unified public export entrypoint
+│   └── index.ts                   # Unified public export entrypoint
 ├── tests/
-│   ├── api/                     # Vitest API test suites
-│   │   ├── auth.test.ts         # Authentication & token refresh tests
-│   │   ├── users.test.ts        # User CRUD & pagination tests
-│   │   ├── orders.test.ts       # Order lifecycle & calculation tests
-│   │   └── resilience.test.ts   # Retry & transient failure recovery tests
-│   ├── rabbitmq/                # Vitest event-driven messaging tests
-│   │   └── orderEvents.test.ts  # Exchange publication & queue consumption assertions
-│   ├── e2e/                     # Playwright browser end-to-end test suites
-│   │   ├── auth.spec.ts         # Login UI, validation & authentication redirects
-│   │   └── dashboard.spec.ts    # Dashboard metrics, tables & logout flow
+│   ├── api/                       # Vitest API test suites
+│   │   ├── auth.test.ts           # Authentication & token refresh tests
+│   │   ├── users.test.ts          # User CRUD & pagination tests
+│   │   ├── orders.test.ts         # Order lifecycle & calculation tests
+│   │   └── resilience.test.ts     # Retry & transient failure recovery tests
+│   ├── rabbitmq/                  # Vitest event-driven messaging tests
+│   │   └── orderEvents.test.ts    # Exchange publication & queue consumption assertions
+│   ├── e2e/                       # Playwright browser end-to-end test suites
+│   │   ├── auth.spec.ts           # Login UI, validation & authentication redirects
+│   │   └── dashboard.spec.ts      # Dashboard metrics, tables & logout flow
 │   ├── mock-server/
-│   │   └── server.ts            # High-performance mock API and web server
-│   ├── globalSetup.ts           # Vitest global server lifecycle setup
-│   └── setup.ts                 # Per-run test harness & auth cleanup
+│   │   └── server.ts              # High-performance mock API and web server
+│   ├── globalSetup.ts             # Vitest global server lifecycle setup
+│   └── setup.ts                   # Per-run test harness & auth cleanup
 ├── scripts/
 │   ├── k6/
-│   │   └── load-test.js         # k6 load testing scenario (VUs, stages, thresholds)
-│   ├── run-k6.ts                # Dual-mode performance runner (k6 CLI + fallback engine)
-│   └── generate-pdf-report.ts   # JUnit XML parser to HTML & Headless Chromium PDF report
-├── playwright.config.ts         # Playwright test runner configuration
-├── vitest.config.ts             # Vitest test runner configuration
-└── tsconfig.json                # TypeScript project configuration
+│   │   └── load-test.js           # k6 load testing scenario (VUs, stages, thresholds)
+│   ├── run-k6.ts                  # Dual-mode performance runner (k6 CLI + fallback engine)
+│   └── generate-pdf-report.ts     # JUnit XML parser to HTML & Headless Chromium PDF report
+├── reports/                       # Generated test execution artifacts
+│   ├── backend-test-report.html   # Interactive test dashboard
+│   ├── backend-test-report.pdf    # Executive PDF summary report
+│   ├── junit-report.xml           # Vitest JUnit XML output
+│   └── playwright-junit.xml       # Playwright JUnit XML output
+├── playwright.config.ts           # Playwright test runner configuration
+├── vitest.config.ts               # Vitest test runner configuration
+├── .gitattributes                 # GitHub Linguist language overrides
+└── tsconfig.json                  # TypeScript project configuration
 ```
 
 ---
 
-## 🚀 Key Features
+## 🚀 Key Framework Capabilities
 
-1. **Robust HTTP Client (`ApiClient`)**:
-   - Automated exponential backoff retry on HTTP 5xx, 429, and transient network errors.
-   - Dynamic authorization header injection via `AuthManager`.
-   - Request and response duration timing tracking.
-   - Standardized `ApiResponse<T>` and custom `ApiError` with debug metadata.
+### 1. Robust HTTP Client (`ApiClient`)
+- Automatic exponential backoff retries on HTTP 5xx, 429, and transient network errors.
+- Centralized bearer token / API key injection managed by `AuthManager`.
+- Request duration metrics tracking and custom `ApiError` exceptions with full request/response debugging metadata.
 
-2. **Event-Driven Messaging (`RabbitMQClient`)**:
-   - Connection management, exchange assertions, queue bindings, and JSON message routing.
-   - Async `waitForMessage<T>` helper to test event consumers without polling loops.
-   - Built-in In-Memory AMQP Broker Simulator to run tests hermetically without requiring external Docker/RabbitMQ instances.
+### 2. Event-Driven Messaging (`RabbitMQClient`)
+- AMQP connection management with exchange assertions (direct, topic, fanout) and queue bindings.
+- Promise-based `waitForMessage<T>()` utility to test async event receipt without busy polling.
+- Built-in **In-Memory AMQP Broker Simulator** allowing tests to run 100% hermetically in CI or local environments without requiring an active external RabbitMQ broker.
 
-3. **Domain Contracts & Schema Validation**:
-   - Runtime request and response verification with **Zod** (`assertSchema`, `validateSchema`).
-   - Strong TypeScript inference for zero runtime type mismatches.
+### 3. Contract & Runtime Schema Validation
+- Strongly typed schema assertions using **Zod** (`assertSchema`, `validateSchema`).
+- Validates request payloads and response bodies with descriptive diff errors on mismatch.
 
-4. **Page Object Model (POM) E2E Testing**:
-   - Clean UI abstraction using **Playwright** (`LoginPage`, `DashboardPage`).
-   - Auto-starts the mock web server and runs parallel browser checks.
+### 4. Page Object Model (POM) E2E Testing
+- UI abstractions via Playwright (`BasePage`, `LoginPage`, `DashboardPage`).
+- Auto-starts the local mock server and executes parallel browser verification.
 
-5. **Dual-Mode Performance Benchmark (`run-k6.ts`)**:
-   - Automatically detects if `k6` is installed and runs the load test scenario.
-   - Seamlessly falls back to an internal concurrent load simulator reporting P50, P95, P99 latency percentiles, error rates, and RPS throughput.
+### 5. Interactive Browser Automation (`playwright-cli`)
+- Integrated agent skill (`.agents/skills/playwright-cli`) enabling CLI-driven browser automation.
+- Session isolation using `-s=<session>` (e.g. `playwright-cli -s=todo-app open <URL>`).
+- Accessibility snapshot inspection (`playwright-cli snapshot`) and ref-based element interactions (`e1`, `e2`).
 
-6. **Executive PDF & HTML Reporting**:
-   - Parses JUnit XML test execution outputs.
-   - Uses Playwright's headless browser to generate an A4 PDF executive test summary (`reports/backend-test-report.pdf`) and an interactive HTML report.
+### 6. Dual-Mode Performance Benchmark (`run-k6.ts`)
+- Automatically detects if `k6` is installed and executes the scenario in `scripts/k6/load-test.js`.
+- Seamlessly falls back to an internal concurrent load simulator reporting P50, P95, P99 latency percentiles, error rates, and RPS throughput.
+
+### 7. Executive PDF & HTML Reporting
+- Ingests test outputs from `reports/junit-report.xml`.
+- Renders an interactive executive HTML dashboard and compiles it into an A4 PDF report (`reports/backend-test-report.pdf`) using Playwright's headless browser.
 
 ---
 
@@ -105,3 +117,41 @@ backend-automation/
 | `npm run test:perf` | Runs API performance benchmark & latency percentiles |
 | `npm run report:pdf` | Generates HTML and executive PDF report (`reports/`) |
 | `npm run mock:server` | Starts standalone mock API and web server |
+
+---
+
+## 🌐 Browser Automation CLI (`playwright-cli`)
+
+For ad-hoc or agent-driven browser workflows:
+
+```bash
+# Open an isolated session
+playwright-cli -s=todo-app open https://demo.playwright.dev/todomvc
+
+# Interact using snapshot refs
+playwright-cli -s=todo-app fill e8 "Buy milk" --submit
+playwright-cli -s=todo-app snapshot
+
+# Capture a screenshot
+playwright-cli -s=todo-app screenshot --filename=reports/todomvc-verified.png
+
+# Close session
+playwright-cli -s=todo-app close
+```
+
+---
+
+## ℹ️ Language & Test Framework Details
+
+### Why Was the Repository Shown as "HTML" on GitHub?
+GitHub uses **Linguist** to determine repository language percentages by counting code bytes in tracked files:
+- The Playwright standalone HTML test report (`reports/playwright-html/index.html`) is a bundled single-page application (~525 KB).
+- By contrast, the framework's TypeScript source files total ~80 KB.
+- Because `reports/` was tracked in git, Linguist detected HTML as over 86% of the code bytes.
+- This is resolved by `.gitattributes`, which marks `reports/**` as `linguist-generated` and ignores HTML/XML report files from language calculation, restoring **TypeScript** as the dominant language.
+
+### Testing Framework: Vitest & Playwright with JUnit XML
+- This repository is a modern **TypeScript / Node.js** project.
+- It uses **Vitest** (BDD style: `describe`, `it`, `expect`) for unit, API, and message queue testing.
+- It uses **Playwright Test** for browser end-to-end testing.
+- Test results are formatted using standard **JUnit XML** (`reports/junit-report.xml`), compatible with standard CI/CD pipelines (Jenkins, GitHub Actions, GitLab CI). *Note: xUnit is a .NET/C# testing framework, whereas this framework leverages TypeScript-native runners.*
