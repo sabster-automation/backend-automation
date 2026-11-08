@@ -1,0 +1,81 @@
+trigger:
+  - master
+
+pr:
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Adjust Node version if your project requires a different one
+  nodeVersion: '20.x'
+  # You may override these in the Azure DevOps pipeline UI or variable groups
+  apiKey: $(API_KEY)
+  rabbitmqUrl: $(RABBITMQ_URL)
+  # Use a secure file variable for .env if needed
+
+steps:
+  # ------------------------------------------------------------
+  # 1. Install Node.js and cache modules
+  # ------------------------------------------------------------
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(nodeVersion)
+    displayName: 'Install Node.js'
+
+  - script: |
+      npm ci
+    displayName: 'Install npm dependencies (ci)'
+
+  # ------------------------------------------------------------
+  # 2. Install Playwright browsers (required for E2E tests)
+  # ------------------------------------------------------------
+  - script: |
+      npx playwright install --with-deps chromium
+    displayName: 'Install Playwright browsers'
+
+  # ------------------------------------------------------------
+  # 3. Build verification (type‑checking only)
+  # ------------------------------------------------------------
+  - script: |
+      npm run build
+    displayName: 'TypeScript type‑check (npm run build)'
+
+  # ------------------------------------------------------------
+  # 4. Run unit / API tests (Vitest) and publish JUnit results
+  # ------------------------------------------------------------
+  - script: |
+      npm run test:api
+    displayName: 'Run Vitest API test suite'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'reports/junit-report.xml'
+      testRunTitle: 'Vitest API Tests'
+    condition: succeededOrFailed()
+    displayName: 'Publish Vitest JUnit results'
+
+  # ------------------------------------------------------------
+  # 5. Run Playwright E2E tests and publish JUnit results
+  # ------------------------------------------------------------
+  - script: |
+      npx playwright test --reporter=junit --output=reports/playwright-junit.xml
+    displayName: 'Run Playwright E2E tests'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: 'reports/playwright-junit.xml'
+      testRunTitle: 'Playwright E2E Tests'
+    condition: succeededOrFailed()
+    displayName: 'Publish Playwright JUnit results'
+
+  # ------------------------------------------------------------
+  # 6. Publish generated reports (HTML, PDF, etc.) as pipeline artifacts
+  # ------------------------------------------------------------
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: 'reports'
+      ArtifactName: 'test-reports'
+      publishLocation: 'Container'
+    displayName: 'Publish test reports artifact'

@@ -7,6 +7,8 @@ A production-grade backend, API, message queue, and browser automation test fram
 ## 🏗 Architecture Overview
 
 ```
+
+
 backend-automation/
 ├── .agents/skills/playwright-cli/ # Antigravity agent browser automation skill
 ├── .claude/skills/playwright-cli/ # Claude Code agent browser automation skill
@@ -68,6 +70,8 @@ backend-automation/
 └── tsconfig.json                  # TypeScript project configuration
 ```
 
+
+
 ---
 
 ## ⚡ Quick Start
@@ -79,20 +83,30 @@ Follow these steps to set up and run the framework on a freshly cloned machine:
 - **npm**: `v9+`
 
 ### 2. Clone & Install Dependencies
-```bash
+```
+
+bash
 git clone <repository-url>
 cd backend-automation
 npm install
 ```
 
+
+
 ### 3. Install Playwright Browsers (for E2E & PDF Reports)
-```bash
+```
+
+bash
 npx playwright install chromium
 ```
 
+
+
 ### 4. Configure Environment Variables
 Copy `.env.example` to `.env` (the defaults work out of the box for hermetic local testing):
-```bash
+```
+
+bash
 # On Linux/macOS
 cp .env.example .env
 
@@ -100,12 +114,16 @@ cp .env.example .env
 Copy-Item .env.example .env
 ```
 
+
+
 > **Note on Hermetic Execution**: External dependencies like RabbitMQ or a remote backend are optional.
 > - When running against `localhost` / `127.0.0.1`, Vitest automatically spins up the internal mock API/web server during `globalSetup`.
 > - If an external RabbitMQ instance is not reachable, `RabbitMQClient` automatically falls back to an in-memory AMQP broker simulator.
 
 ### 5. Run the Tests
-```bash
+```
+
+bash
 # Run API integration test suite
 npm run test:api
 
@@ -122,14 +140,20 @@ npm run test:e2e
 npm run test:perf
 ```
 
+
+
 ### 6. Generate Reports
-```bash
+```
+
+bash
 # Generate HTML and executive PDF report (from JUnit XML)
 npm run report:pdf
 
 # Generate and view Allure reports
 npm run report:allure
 ```
+
+
 
 ---
 
@@ -187,7 +211,9 @@ npm run report:allure
 
 For ad-hoc or agent-driven browser workflows:
 
-```bash
+```
+
+bash
 # Open an isolated session
 playwright-cli -s=todo-app open https://demo.playwright.dev/todomvc
 
@@ -201,3 +227,5 @@ playwright-cli -s=todo-app screenshot --filename=reports/todomvc-verified.png
 # Close session
 playwright-cli -s=todo-app close
 ```
+
+
