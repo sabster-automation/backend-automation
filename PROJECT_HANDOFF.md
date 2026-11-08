@@ -232,12 +232,7 @@ backend-automation/
 
 ## 6. Immediate Next Steps
 
-1. **Reconcile Git Branch Divergence:**
-   - The local `master` branch and `origin/master` have diverged with distinct commits.
-   - Remote commits include corporate TLS configuration updates, multi-browser configurations (Firefox, WebKit), and Quick Start documentation.
-   - **Action:** Execute `git pull --rebase origin master` and push the consolidated history.
-
-2. **Deploy Azure DevOps CI/CD Pipeline (`azure-pipelines.yml`):**
+1. **Deploy Azure DevOps CI/CD Pipeline (`azure-pipelines.yml`):**
    - Implement `azure-pipelines.yml` (as specified during the initial planning session in Conversation 1) containing:
      - Node.js 20.x tool installer.
      - npm dependency caching (`package-lock.json`).
@@ -247,17 +242,20 @@ backend-automation/
      - Playwright E2E test execution with JUnit publishing (`PublishTestResults@2` targeting `reports/playwright-junit.xml`).
      - PDF and HTML report artifact publishing (`PublishBuildArtifacts@1` targeting `reports/`).
 
-3. **Purge Committed `node_modules` from Git History:**
-   - In the initial commit (`efda368`), `node_modules/` was checked into Git (~150 MB).
-   - **Action:** Run `git rm -r --cached node_modules`, update `.gitignore` with `/node_modules`, and commit to dramatically reduce repository clone time and size.
-
-4. **Multi-Environment Profiles (`.env.staging`, `.env.production`):**
+2. **Multi-Environment Profiles (`.env.staging`, `.env.production`):**
    - Provide concrete environment files for non-local environments.
    - Configure Azure DevOps pipeline variables / key vault secrets to map `API_KEY` and `RABBITMQ_URL` dynamically based on branch or stage.
 
-5. **Expand Test Suites & Negative Scenarios:**
+3. **Expand Test Suites & Negative Scenarios:**
    - Add negative API tests for token expiration, malformed JSON bodies, payload size limits, and invalid HTTP verbs.
    - Add a test reset endpoint (`POST /api/v1/mock/reset`) to the mock server to clear modified in-memory records between test runs.
 
-6. **Visual Regression Testing:**
+4. **Visual Regression Testing:**
    - Integrate Playwright visual snapshot assertions (`expect(page).toHaveScreenshot()`) for the dashboard and login pages across Chromium, Firefox, and WebKit.
+
+---
+
+## 7. Recently Completed Maintenance Tasks
+
+- ✅ **Git Branch Reconciliation:** Master branch rebased and synchronized with `origin/master`, integrating corporate TLS cert bypass (`ignoreHTTPSErrors`), multi-browser configurations (Firefox, WebKit), and Quick Start documentation.
+- ✅ **Purged `node_modules` from Git Cache:** Executed `git rm -r --cached node_modules` (removing 4,170 tracked files / 1.5M lines from the repository index while preserving physical files on disk), backed by `.gitignore`.
